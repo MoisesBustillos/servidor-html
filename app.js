@@ -3,6 +3,17 @@ const fs = require('fs');
 
 http.createServer((request, response)=>{
     const file = request.url == '/' ? './WWW/index.html': `./WWW/${request.url}`;
+    if(request.url=='/registro'){
+        let data = [];
+        request.on("data", value=>{
+            data.push(value);
+        }).on("end", ()=>{
+            let params = Buffer.concat(data).toString();
+            response.write(params);
+            response.end();
+        });
+
+    }
     fs.readFile(file, (err, data)=>{
         if(err){
             response.writeHead(404, {"Content-Type":"text/plain"});
